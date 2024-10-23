@@ -105,4 +105,4 @@ root.render(
     <React.StrictMode>
         <LandingPage />
     </React.StrictMode>
-)
+);
