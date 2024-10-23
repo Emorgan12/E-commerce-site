@@ -100,4 +100,9 @@ function LandingPage() {
     );
 }
 
-reactDOM.render(<LandingPage />, document.getElementById('app'))
+const root = reactDOM.createRoot(document.getElementById('app'))
+root.render(
+    <React.StrictMode>
+        <LandingPage />
+    </React.StrictMode>
+)
