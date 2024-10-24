@@ -27,19 +27,18 @@ jobs:
         with:
           node-version: 16
 
-      - name: Switch to website directory
-        run: cd e-commerce-site
-
       - name: Install dependencies
         run: npm install
+        working-directory: ./e-commerce-site
 
       - name: Build project
         run: npm run build
+        working-directory: ./e-commerce-site
 
       - name: Upload to pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./e-commerce-site/dist
 
       - name: Deploy website
         uses: actions/deploy-pages@v4
