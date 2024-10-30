@@ -95,6 +95,15 @@ b{
   width: 15vw;
 }
 
+.cart-item{
+  display: grid;
+
+}
+#cart-name{
+  
+}
+
+
 @media screen and (max-width: 750px){
 
   html{
