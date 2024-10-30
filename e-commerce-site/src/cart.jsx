@@ -28,9 +28,11 @@ function Cart(){
             <div className="content">
                 <div class="cart-item">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeJQeJyzgAzTEVqXiGe90RGBFhfp_4RcJJMQ&s" />
-                    <p id="cart-name">Name</p>
-                    <p id="cart-colour">Colour</p>
-                    <p id="cart-price">Price</p>
+                    <div id="description">
+                        <p id="cart-name">Name</p>
+                        <p id="cart-colour">Colour</p>
+                        <p id="cart-price">£0.00</p>
+                    </div>
                 </div>
             </div>
         </>

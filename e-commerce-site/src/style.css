@@ -97,10 +97,38 @@ b{
 
 .cart-item{
   display: grid;
-
+  grid-template-areas: 
+    'img description'; 
+  gap: 0;
+  grid-template-columns: auto 1fr;
+  grid-auto-rows: min-content;
 }
-#cart-name{
-  
+
+#description{
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+#cart-img{
+  grid-area: img;
+  margin: 0;
+  padding: 0;
+  justify-self: end;
+}
+
+#description{
+  grid-area: description;
+  font-size: 1.5rem;
+  margin-left: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-right: 20px;
+}
+
+#cart-name, #cart-colour{
+  margin-bottom: 30px;
 }
 
 
