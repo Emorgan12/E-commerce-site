@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ecraig\\E-commerce-site\\api\\api.csproj": {}
+    "C:\\Users\\ecraig\\OneDrive - Numatic International Limited\\E-commerce-site\\api\\api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ecraig\\E-commerce-site\\api\\api.csproj": {
+    "C:\\Users\\ecraig\\OneDrive - Numatic International Limited\\E-commerce-site\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ecraig\\E-commerce-site\\api\\api.csproj",
+        "projectUniqueName": "C:\\Users\\ecraig\\OneDrive - Numatic International Limited\\E-commerce-site\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "C:\\Users\\ecraig\\E-commerce-site\\api\\api.csproj",
+        "projectPath": "C:\\Users\\ecraig\\OneDrive - Numatic International Limited\\E-commerce-site\\api\\api.csproj",
         "packagesPath": "C:\\Users\\ecraig\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ecraig\\E-commerce-site\\api\\obj\\",
+        "outputPath": "C:\\Users\\ecraig\\OneDrive - Numatic International Limited\\E-commerce-site\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ecraig\\AppData\\Roaming\\NuGet\\NuGet.Config",

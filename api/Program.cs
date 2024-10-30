@@ -13,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
+
 
 // Register DataContext with dependency injection to use SQLite
 builder.Services.AddDbContext<DataContext>(options =>
@@ -30,12 +32,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Uncomment the following line if you need HTTPS redirection
-// app.UseHttpsRedirection();
+app.UseCors(options =>
+{
+    options.AllowAnyOrigin();
+    options.AllowAnyHeader();
+    options.AllowAnyMethod();
+});
 
 app.MapPost("/post", async ([FromBody] Product product, IProductsRepository repository) =>
 {
-    await repository.NewProduct(product.Name, product.Colour, product.Price);
+    await repository.NewProduct(product.Name, product.Image, product.Colour, product.Price);
     return Results.Ok(product);
 })
 .WithName("NewProduct")
@@ -76,11 +82,21 @@ app.MapGet("/search", async (Guid id, IProductsRepository repository) =>
 .WithName("GetProduct")
 .WithOpenApi();
 
+app.MapPut("/update", async (Guid id, string name, Uri image, string colour, float price, IProductsRepository repository) =>
+{
+    var product = repository.GetProduct(id);
+    await repository.UpdateProduct(id, name, image, colour, price);
+})
+.WithName("UpdateProduct")
+.WithOpenApi();
+
 app.Run();
 
 public class Product
 {
     public Guid Id { get; set; }
+
+    public Uri Image { get; set; }
     public string Name { get; set; }
     public string Colour { get; set; }
     public float Price { get; set; }

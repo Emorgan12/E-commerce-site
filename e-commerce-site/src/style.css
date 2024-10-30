@@ -25,13 +25,12 @@ nav ul{
   position: absolute;
   top: 10px;
   width: 100%;
+  align-items: center;
   justify-content: space-around;
 }
 
 nav ul li{
  display: block;
- flex: 0 1 auto;
-
 }
 
 
@@ -46,7 +45,7 @@ b{
   font-size: 2rem;
 }
 
-#home{
+#home img{
   height: 50px;
   width: 50px;
 }
@@ -55,10 +54,17 @@ b{
   margin: 0 20px 0 0 ;
 }
 
+#home{
+  margin: 0 0 0 20px;
+}
+
+
 #cart-img{
   height: 60px;
   width: 60px;
 }
+
+
 
 .content {
   margin-top: 130px;
@@ -67,16 +73,29 @@ b{
 
 .row{
   display: flex;
-  align-items: center;
-  flex-direction: row;
-  gap: 10%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.item{
+  flex: 1 1 20%;
+  margin-bottom: 30px;
+}
+
+.name, .colour{
+  font-size: 3vh;
+}
+
+.price{
+  font-size: 3.5vh;
+  font-weight: 700;
 }
 
 .item img{
-  width: 130%;
+  width: 15vw;
 }
 
-@media screen and (max-width: 850px){
+@media screen and (max-width: 750px){
 
   html{
     width: 90vw;
@@ -101,7 +120,7 @@ b{
     position: absolute;
     top: 10px;
     width: 100%;
-    justify-content: space-around;
+    justify-content: space-between;
   }
 
   #mobile li p{
@@ -116,5 +135,20 @@ b{
 
   .mobile-img{
     margin: 1vh 0 0 0;
+  }
+
+  .item img{
+    margin-left: 5px;
+    width: 20vw;
+  }
+
+  .item{
+    flex: 1 1 30%;
+  }
+}
+
+@media screen and (max-width: 402px){
+  .item{
+    flex: 1 1 35%
   }
 }

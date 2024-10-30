@@ -15,12 +15,13 @@ public class ProductRepository : IProductsRepository
         return await _context.Products.ToListAsync();
     }
 
-    public async Task NewProduct(string name, string colour, float price)
+    public async Task NewProduct(string name, Uri image, string colour, float price)
     {
         var product = new Product
         {
             Id = Guid.NewGuid(),
             Name = name,
+            Image = image,
             Colour = colour,
             Price = price
         };
@@ -45,6 +46,28 @@ public class ProductRepository : IProductsRepository
         catch
         {
             return null;
+        }
+    }
+
+    public async Task UpdateProduct(Guid id, string name, Uri image, string colour, float price)
+    {
+        var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        if (product == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        product.Name = name;
+        product.Image = image;
+        product.Colour = colour;
+        product.Price = price;
+        _context.Products.Update(product);
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new KeyNotFoundException("Product not found.");
         }
     }
 }

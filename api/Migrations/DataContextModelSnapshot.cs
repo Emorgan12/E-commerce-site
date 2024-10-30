@@ -18,11 +18,15 @@ namespace api.Migrations
 
             modelBuilder.Entity("Product", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Colour")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -33,7 +37,7 @@ namespace api.Migrations
                     b.Property<float>("Price")
                         .HasColumnType("REAL");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("Products");
                 });
