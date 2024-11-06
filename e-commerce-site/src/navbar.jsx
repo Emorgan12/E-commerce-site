@@ -1,7 +1,6 @@
-import { useAuth0 } from "@auth0/auth0-react";
+
 
 function Navbar(){
-    const {isAuthenticated} = useAuth0();
     return(
         <nav>
             <ul id="mobile">
