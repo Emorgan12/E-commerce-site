@@ -8,17 +8,21 @@ const Login = () => {
     console.log("Loading login page");
     return (
         <>
-            <form className='container'>
-                <div>
-                    <label id="username">Username</label>
-                    <input HtmlFor="username"></input>
-                </div>
-                <div>
-                    <label id="password">Password</label>
-                    <input HtmlFor="password"></input>
-                </div>
-                <button type="submit" className='login'>Login</button>
-            </form>
+            <div className='container'>
+                <form className='container'>
+                    <div>
+                        <label id="username">Username</label>
+                        <input HtmlFor="username"></input>
+                    </div>
+                    <div>
+                        <label id="password">Password</label>
+                        <input HtmlFor="password"></input>
+                    </div>
+                    <button type="submit" className='login'>Login</button>
+                    <p>Don't have an account? <a href="/register">Register</a></p>
+                </form>
+            </div>
+
             <Footer />
         </>
     )
