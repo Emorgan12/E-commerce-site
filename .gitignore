@@ -31,6 +31,6 @@ obj
 migrations
 obj
 bin
-.products.db
-.products.db-shm
+products.db
+products.db-shm
 products.db-wal
