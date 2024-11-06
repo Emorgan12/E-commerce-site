@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,7 +40,7 @@ app.UseCors(options =>
     options.AllowAnyMethod();
 });
 
-app.MapPost("/post", async ([FromBody] Product product, IProductsRepository repository) =>
+app.MapPost("/postProduct", async ([FromBody] Product product, IProductsRepository repository) =>
 {
     await repository.NewProduct(product.Name, product.Image, product.Colour, product.Price);
     return Results.Ok(product);
@@ -47,7 +48,7 @@ app.MapPost("/post", async ([FromBody] Product product, IProductsRepository repo
 .WithName("NewProduct")
 .WithOpenApi();
 
-app.MapGet("/get", async (IProductsRepository repository) =>
+app.MapGet("/getProducts", async (IProductsRepository repository) =>
 {
     var products = await repository.GetProducts();
     return Results.Ok(products);
@@ -55,7 +56,7 @@ app.MapGet("/get", async (IProductsRepository repository) =>
 .WithName("GetProducts")
 .WithOpenApi();
 
-app.MapDelete("/delete", async (Guid id, IProductsRepository repository, [FromServices] ILogger<Program> logger) =>
+app.MapDelete("/deleteProduct", async (Guid id, IProductsRepository repository, [FromServices] ILogger<Program> logger) =>
 {
     try
     {
@@ -70,7 +71,7 @@ app.MapDelete("/delete", async (Guid id, IProductsRepository repository, [FromSe
 .WithName("DeleteProduct")
 .WithOpenApi();
 
-app.MapGet("/search", async (Guid id, IProductsRepository repository) =>
+app.MapGet("/searchProduct", async (Guid id, IProductsRepository repository) =>
 {
     var product = await repository.GetProduct(id);
     if (product != null)
@@ -82,12 +83,61 @@ app.MapGet("/search", async (Guid id, IProductsRepository repository) =>
 .WithName("GetProduct")
 .WithOpenApi();
 
-app.MapPut("/update", async (Guid id, string name, Uri image, string colour, float price, IProductsRepository repository) =>
+app.MapPut("/updateProduct", async (Guid id, string name, Uri image, string colour, float price, IProductsRepository repository) =>
 {
     var product = repository.GetProduct(id);
     await repository.UpdateProduct(id, name, image, colour, price);
 })
 .WithName("UpdateProduct")
+.WithOpenApi();
+
+app.MapGet("/getAccounts", async (IProductsRepository repository) =>
+{
+    var accounts = await repository.GetAccounts();
+    return Results.Ok(accounts);
+})
+.WithName("GetAccounts")
+.WithOpenApi();
+
+app.MapPost("/newAccount", async ([FromBody] Account account, IProductsRepository repository) =>
+{
+    await repository.NewAccount(account.Username, account.Password, account.Email);
+    return Results.Ok(account);
+})
+.WithName("NewAccount")
+.WithOpenApi();
+
+
+app.MapPut("/updateEmail", async (Guid id, [FromBody] string email, IProductsRepository repository) =>
+{
+    await repository.UpdateEmail(id, email);
+    return Results.NoContent();
+})
+.WithName("UpdateEmail")
+.WithOpenApi();
+
+app.MapPut("/updatePassword", async (Guid id, [FromBody] string password, IProductsRepository repository) =>
+{
+    await repository.UpdatePassword(id, password);
+    return Results.NoContent();
+})
+.WithName("UpdatePassword")
+.WithOpenApi();
+
+app.MapDelete("/deleteAccount", async (Guid id, IProductsRepository repository) =>
+{
+    await repository.DeleteAccount(id);
+    return Results.NoContent();
+})
+.WithName("DeleteAccount")
+.WithOpenApi();
+
+app.MapGet("/getAccount", async (Guid id, IProductsRepository repository) =>
+{
+    var account = await repository.GetAccount(id);
+    return account;
+})
+.WithName("GetAccount")
 .WithOpenApi();
 
 app.Run();
@@ -100,4 +150,12 @@ public class Product
     public string Name { get; set; }
     public string Colour { get; set; }
     public float Price { get; set; }
+}
+
+public class Account
+{
+    public Guid Id { get; set; }
+    public string Username { get; set; }
+    public string Password { get; set; }
+    public string Email { get; set; }
 }

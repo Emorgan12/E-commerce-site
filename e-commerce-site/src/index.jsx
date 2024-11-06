@@ -17,8 +17,9 @@ const Login = () => {
                     <label id="password">Password</label>
                     <input HtmlFor="password"></input>
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit" className='login'>Login</button>
             </form>
+            <Footer />
         </>
     )
 }
