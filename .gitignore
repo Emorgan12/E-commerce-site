@@ -29,14 +29,6 @@ obj
 *.sw?
 
 migrations
-obj
-bin
 products.db
 products.db-shm
 products.db-wal
-api/obj/Debug/net8.0/api.AssemblyInfo.cs
-*.db
-*.db
-/api/obj
-api/products.db
-api/products.db
