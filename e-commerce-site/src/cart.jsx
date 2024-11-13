@@ -11,7 +11,7 @@ function Cart(){
             <Navbar />
 
             <div className="content">
-                <CartItem />
+            <CartItem /><CartItem /><CartItem /><CartItem />
             </div>
 
             <Footer />
