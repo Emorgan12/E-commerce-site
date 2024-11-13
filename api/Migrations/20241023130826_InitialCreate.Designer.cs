@@ -21,6 +21,9 @@ namespace api.Migrations
 
             modelBuilder.Entity("Product", b =>
                 {
+                    b.Property<string>("image")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
                     b.Property<Guid>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");

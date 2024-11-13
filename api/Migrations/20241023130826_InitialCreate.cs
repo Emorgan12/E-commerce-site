@@ -15,6 +15,7 @@ namespace api.Migrations
                 name: "Products",
                 columns: table => new
                 {
+                    image = table.Column<string>(type: "TEXT", nullable: false),
                     id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Colour = table.Column<string>(type: "TEXT", nullable: false),
