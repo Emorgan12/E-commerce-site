@@ -1,10 +1,16 @@
 import reactDOM from 'react-dom/client';
-import React from 'react';
+import React, { useContext } from 'react';
 import Navbar from './navbar.jsx';
 import Footer from './footer.jsx';
 import BASE_URL from '../main.js';
+import {useNavigate, Link } from 'react-router-dom';
+import { AuthContext } from './authcontext.jsx';
 
 const Login = () => {
+
+    const navigate = useNavigate();
+    const{ login } = useContext(AuthContext);
+
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const loginUrl = `${BASE_URL}login/${encodeURIComponent(username)},${encodeURIComponent(password)}`;
@@ -22,7 +28,10 @@ const Login = () => {
         })
         .then(text => {
             if (text) {
-                return JSON.parse(text); // Parse the text to JSON if it's not empty
+                const userData = JSON.parse(text);
+                login(userData);
+                navigate('/products');
+                return user;
             }
             return {}; // Return an empty object if the response is empty
         })
@@ -42,10 +51,10 @@ const Login = () => {
                     </div>
                     <div>
                         <label id="password" onChange={(e) => setPassword(e.target.value)}>Password</label>
-                        <input htmlFor="password" onChange={(e) => setPassword(e.target.value)}></input>
+                        <input type="password" htmlFor="password" onChange={(e) => setPassword(e.target.value)}></input>
                     </div>
                     <button type="submit" className='login' onClick={handleLogin}>Login</button>
-                    <p>Don't have an account? <a href="/register">Register</a></p>
+                    <p>Don't have an account? <Link to="/register">Register</Link></p>
                 </form>
             </div>
 
@@ -54,9 +63,5 @@ const Login = () => {
     )
 }
 
-const root = reactDOM.createRoot(document.getElementById('app'))
-root.render(
-    <React.StrictMode>
-        <Login />
-    </React.StrictMode>
-);
+
+export default Login;

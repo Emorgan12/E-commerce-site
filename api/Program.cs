@@ -43,7 +43,7 @@ app.UseCors(options =>
 
 app.MapPost("/postProduct", async ([FromBody] Product product, IProductsRepository repository) =>
 {
-    await repository.NewProduct(product.Name, product.Image, product.Colour, product.Price);
+    await repository.NewProduct(product.Name, product.Image, product.Colour, product.Price, product.Description);
     return Results.Ok(product);
 })
 .WithName("NewProduct")
@@ -118,7 +118,6 @@ app.MapGet("/login/{username},{password}", async (string username, string passwo
 app.MapPost("/newAccount", async ([FromBody] Account account, IProductsRepository repository) =>
 {
     await repository.NewAccount(account.Username, account.Password, account.Email);
-    await repository.NewCart(account.Id);
     return Results.Ok(account);
 })
 .WithName("NewAccount")
@@ -157,9 +156,9 @@ app.MapGet("/getAccount", async (int id, IProductsRepository repository) =>
 .WithName("GetAccount")
 .WithOpenApi();
 
-app.MapPut("/updateCart", async (int id, int accountId, [FromBody] Product product, IProductsRepository repository) =>
+app.MapPut("/updateCart", async (int accountId, [FromBody] Product product, IProductsRepository repository) =>
 {
-    await repository.UpdateCart(id, accountId, product);
+    await repository.UpdateCart(accountId, product);
     return Results.NoContent();
 })
 .WithName("UpdateCart")
@@ -189,14 +188,6 @@ app.MapDelete("/deleteCart", async (int id, IProductsRepository repository) =>
 .WithName("DeleteCart")
 .WithOpenApi();
 
-app.MapPost("/postCart", async ([FromBody] Cart cart, IProductsRepository repository) =>
-{
-    await repository.NewCart(cart.AccountId);
-    return Results.Ok(cart);
-})
-.WithName("NewCart")
-.WithOpenApi();
-
 app.Run();
 
 public class Product
@@ -207,6 +198,7 @@ public class Product
     public string Name { get; set; }
     public string Colour { get; set; }
     public float Price { get; set; }
+    public string Description { get; set; }
 }
 
 public class Account
@@ -215,11 +207,13 @@ public class Account
     public string Username { get; set; }
     public string Password { get; set; }
     public string Email { get; set; }
+    public Cart Cart { get; set; }
 }
 
 public class Cart
 {
     public int Id { get; set; }
     public int AccountId { get; set; }
-    public List<Product> Products { get; set; }
+    public virtual Account Account { get; set; }
+    public virtual List<Product> Products { get; set; }
 }

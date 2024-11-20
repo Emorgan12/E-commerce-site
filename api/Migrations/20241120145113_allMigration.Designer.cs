@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241113154239_AllMigration")]
-    partial class AllMigration
+    [Migration("20241120145113_allMigration")]
+    partial class allMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,9 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AccountId")
+                        .IsUnique();
+
                     b.ToTable("Carts");
                 });
 
@@ -86,11 +89,28 @@ namespace api.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Cart", b =>
+                {
+                    b.HasOne("Account", "Account")
+                        .WithOne("Cart")
+                        .HasForeignKey("Cart", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
             modelBuilder.Entity("Product", b =>
                 {
                     b.HasOne("Cart", null)
                         .WithMany("Products")
                         .HasForeignKey("CartId");
+                });
+
+            modelBuilder.Entity("Account", b =>
+                {
+                    b.Navigation("Cart")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Cart", b =>

@@ -1,0 +1,22 @@
+services:
+  webapi:
+    build:
+      context: ./api
+      dockerfile: ./Dockerfile
+    image: productapi
+    ports:
+      - "5001:80"
+    volumes:
+      - ./api/products.db:/app/products.db
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_ENVIRONMENT=Development
+  web:
+    build:
+      context: ./e-commerce-site
+      dockerfile: ./Dockerfile
+    image: productsite
+    ports:
+      - "5000:3000"
+    environment:
+      NODE_ENV: development

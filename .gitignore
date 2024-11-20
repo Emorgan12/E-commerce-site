@@ -34,3 +34,5 @@ products.db-shm
 products.db-wal
 /api/bin
 /api/bin
+
+.fake

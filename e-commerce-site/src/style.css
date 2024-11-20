@@ -260,6 +260,48 @@ form div label, form div button{
   display: none;
 }
 
+.product-details h2{
+  margin-bottom: 10px;
+}
+
+.product-details img{
+  width: 25vw;
+  height: 25vw;
+}
+
+.details{
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.product-details button{
+  margin-top: 20px;
+  height: 50px;
+  width: 120px;
+  border-radius: 10px;
+  color:#ff8dfd;
+  background-color: #59009D;
+}
+
+.product-details p{
+  margin-top: 10px;
+}
+
+#description{
+  font-size: 1.5rem;
+}
+
+.product-details {
+  display: flex;
+  overflow: hidden;
+}
+
+#price{
+  font-size: 2rem;
+  font-weight: 700;
+}
+
 @media screen  and (max-width: 1135px){
 
   .small{

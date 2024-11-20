@@ -20,7 +20,7 @@ public class ProductRepository : IProductsRepository
         return await _context.Products.ToListAsync();
     }
 
-    public async Task NewProduct(string name, Uri image, string colour, float price)
+    public async Task NewProduct(string name, Uri image, string colour, float price, string description)
     {
         var product = new Product
         {
@@ -28,7 +28,8 @@ public class ProductRepository : IProductsRepository
             Name = name,
             Image = image,
             Colour = colour,
-            Price = price
+            Price = price,
+            Description = description
         };
 
         await _context.Products.AddAsync(product);
@@ -77,17 +78,25 @@ public class ProductRepository : IProductsRepository
         }
     }
 
-    public async Task NewAccount(string username, string password, string email)
+    public async Task<Account> NewAccount(string username, string password, string email)
     {
+        foreach (var accountInList in _context.Accounts){
+            if (username == accountInList.Username)
+            {
+                throw new ArgumentException("Username already exists.");
+            }
+        }
         var account = new Account
         {
             Id = random.Next(),
             Username = username,
             Password = password,
-            Email = email
+            Email = email,
+            Cart = new Cart()
         };
         await _context.Accounts.AddAsync(account);
         await _context.SaveChangesAsync();
+        return account;
     }
 
     public async Task<List<Account>> GetAccounts()
@@ -153,18 +162,6 @@ public class ProductRepository : IProductsRepository
         }
     }
 
-    public async Task NewCart(int accountId)
-    {
-        var cart = new Cart
-        {
-            Id = random.Next(),
-            AccountId = accountId,
-            Products = new List<Product>()
-        };
-        await _context.Carts.AddAsync(cart);
-        await _context.SaveChangesAsync();
-    }
-
 
     public async Task<List<Cart>> GetCarts()
     {
@@ -191,9 +188,9 @@ public class ProductRepository : IProductsRepository
         }
     }
 
-    public async Task UpdateCart(int id, int accountId, Product product)
+    public async Task UpdateCart(int accountId, Product product)
     {
-        var cart = await _context.Carts.FirstOrDefaultAsync(c => c.Id == id);
+        var cart = await _context.Carts.FirstOrDefaultAsync(c => c.AccountId == accountId);
         if (cart == null)
         {
             throw new KeyNotFoundException();

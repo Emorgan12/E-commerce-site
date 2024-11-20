@@ -21,7 +21,7 @@ RUN dotnet publish "api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY ./products.db ./
+COPY products.db ./
 USER root
 RUN chmod 666 /app/products.db
 ENTRYPOINT ["dotnet", "api.dll"]
