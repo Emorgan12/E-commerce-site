@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using ECommerceSite;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,13 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 // Register the repository
 builder.Services.AddScoped<IProductsRepository, ProductRepository>();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    });
 
 var app = builder.Build();
 
@@ -84,7 +93,7 @@ app.MapGet("/searchProduct", async (int id, IProductsRepository repository) =>
 .WithName("GetProduct")
 .WithOpenApi();
 
-app.MapPut("/updateProduct", async (int id, string name, Uri image, string colour, float price, IProductsRepository repository) =>
+app.MapPut("/updateProduct", async (int id, string name, string image, string colour, float price, IProductsRepository repository) =>
 {
     var product = repository.GetProduct(id);
     await repository.UpdateProduct(id, name, image, colour, price);
@@ -190,30 +199,34 @@ app.MapDelete("/deleteCart", async (int id, IProductsRepository repository) =>
 
 app.Run();
 
-public class Product
+namespace ECommerceSite
 {
-    public int Id { get; set; }
+    public class Product
+    {
+        public int Id { get; set; }
 
-    public Uri Image { get; set; }
-    public string Name { get; set; }
-    public string Colour { get; set; }
-    public float Price { get; set; }
-    public string Description { get; set; }
-}
+        public string Image { get; set; }
+        public string Name { get; set; }
+        public string Colour { get; set; }
+        public float Price { get; set; }
+        public string Description { get; set; }
+    }
 
-public class Account
-{
-    public int Id { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public string Email { get; set; }
-    public Cart Cart { get; set; }
-}
+    public class Account
+    {
+        public int Id { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public Cart Cart { get; set; }
+    }
 
-public class Cart
-{
-    public int Id { get; set; }
-    public int AccountId { get; set; }
-    public virtual Account Account { get; set; }
-    public virtual List<Product> Products { get; set; }
+    public class Cart
+    {
+        public int Id { get; set; }
+        public int AccountId { get; set; }
+        [JsonIgnore]
+        public Account Account { get; set; }
+        public List<Product> Products { get; set; }
+    }
 }

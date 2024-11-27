@@ -21,9 +21,9 @@ function Footer(){
                 <h4><Link to="/Linkbout">Learn more about us</Link></h4>
             </div>
             <div className="small"> 
-                <Link to="/faq#shipping" id="faq-small"><img src="https://cdn-icons-png.flaticon.com/128/471/471664.png"/></Link>
-                <Link to="/faq#returns" id="contact-small"><img src="https://cdn-icons-png.flaticon.com/128/747/747314.png"/></Link>
-                <Link to="/faq#payment" id="about-small"><img src="https://cdn-icons-png.flaticon.com/128/665/665049.png"/></Link>
+                <Link to="/faq" id="faq-small"><img src="https://cdn-icons-png.flaticon.com/128/471/471664.png"/></Link>
+                <Link to="/about#contact" id="contact-small"><img src="https://cdn-icons-png.flaticon.com/128/747/747314.png"/></Link>
+                <Link to="/faq#contact" id="about-small"><img src="https://cdn-icons-png.flaticon.com/128/665/665049.png"/></Link>
             </div>
     </footer>
     )

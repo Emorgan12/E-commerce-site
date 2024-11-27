@@ -3,12 +3,14 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using ECommerceSite;
+
 
 public class ProductRepository : IProductsRepository
 {
     private readonly DataContext _context;
     Random random = new Random();
-    
+
 
     public ProductRepository(DataContext context)
     {
@@ -20,11 +22,10 @@ public class ProductRepository : IProductsRepository
         return await _context.Products.ToListAsync();
     }
 
-    public async Task NewProduct(string name, Uri image, string colour, float price, string description)
+    public async Task NewProduct(string name, string image, string colour, float price, string description)
     {
         var product = new Product
         {
-            Id = random.Next(),
             Name = name,
             Image = image,
             Colour = colour,
@@ -56,7 +57,7 @@ public class ProductRepository : IProductsRepository
         }
     }
 
-    public async Task UpdateProduct(int id, string name, Uri image, string colour, float price)
+    public async Task UpdateProduct(int id, string name, string image, string colour, float price)
     {
         var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
         if (product == null)
@@ -80,7 +81,8 @@ public class ProductRepository : IProductsRepository
 
     public async Task<Account> NewAccount(string username, string password, string email)
     {
-        foreach (var accountInList in _context.Accounts){
+        foreach (var accountInList in _context.Accounts)
+        {
             if (username == accountInList.Username)
             {
                 throw new ArgumentException("Username already exists.");

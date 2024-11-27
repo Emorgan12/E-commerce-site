@@ -15,7 +15,7 @@ namespace api.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
 
-            modelBuilder.Entity("Account", b =>
+            modelBuilder.Entity("ECommerceSite.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,7 @@ namespace api.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("Cart", b =>
+            modelBuilder.Entity("ECommerceSite.Cart", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,7 +55,7 @@ namespace api.Migrations
                     b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("Product", b =>
+            modelBuilder.Entity("ECommerceSite.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -90,31 +90,32 @@ namespace api.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Cart", b =>
+            modelBuilder.Entity("ECommerceSite.Cart", b =>
                 {
-                    b.HasOne("Account", "Account")
+                    b.HasOne("ECommerceSite.Account", "Account")
                         .WithOne("Cart")
-                        .HasForeignKey("Cart", "AccountId")
+                        .HasForeignKey("ECommerceSite.Cart", "AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("Product", b =>
+            modelBuilder.Entity("ECommerceSite.Product", b =>
                 {
-                    b.HasOne("Cart", null)
+                    b.HasOne("ECommerceSite.Cart", null)
                         .WithMany("Products")
-                        .HasForeignKey("CartId");
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Account", b =>
+            modelBuilder.Entity("ECommerceSite.Account", b =>
                 {
                     b.Navigation("Cart")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Cart", b =>
+            modelBuilder.Entity("ECommerceSite.Cart", b =>
                 {
                     b.Navigation("Products");
                 });
