@@ -1,10 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 
 public class ProductRepository : IProductsRepository
 {
     private readonly DataContext _context;
+    Random random = new Random();
+    
 
     public ProductRepository(DataContext context)
     {
@@ -16,28 +20,30 @@ public class ProductRepository : IProductsRepository
         return await _context.Products.ToListAsync();
     }
 
-    public async Task NewProduct(string name, Uri image, string colour, float price)
+    public async Task NewProduct(string name, Uri image, string colour, float price, string description)
     {
         var product = new Product
         {
-            Id = Guid.NewGuid(),
+            Id = random.Next(),
             Name = name,
             Image = image,
             Colour = colour,
-            Price = price
+            Price = price,
+            Description = description
         };
+
         await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteProduct(Guid id)
+    public async Task DeleteProduct(int id)
     {
         Product product = await GetProduct(id);
         _context.Products.Remove(product);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Product> GetProduct(Guid id)
+    public async Task<Product> GetProduct(int id)
     {
         try
         {
@@ -50,7 +56,7 @@ public class ProductRepository : IProductsRepository
         }
     }
 
-    public async Task UpdateProduct(Guid id, string name, Uri image, string colour, float price)
+    public async Task UpdateProduct(int id, string name, Uri image, string colour, float price)
     {
         var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
         if (product == null)
@@ -72,17 +78,25 @@ public class ProductRepository : IProductsRepository
         }
     }
 
-    public async Task NewAccount(string username, string password, string email)
+    public async Task<Account> NewAccount(string username, string password, string email)
     {
+        foreach (var accountInList in _context.Accounts){
+            if (username == accountInList.Username)
+            {
+                throw new ArgumentException("Username already exists.");
+            }
+        }
         var account = new Account
         {
-            Id = Guid.NewGuid(),
+            Id = random.Next(),
             Username = username,
             Password = password,
-            Email = email
+            Email = email,
+            Cart = new Cart()
         };
         await _context.Accounts.AddAsync(account);
         await _context.SaveChangesAsync();
+        return account;
     }
 
     public async Task<List<Account>> GetAccounts()
@@ -90,14 +104,14 @@ public class ProductRepository : IProductsRepository
         return await _context.Accounts.ToListAsync();
     }
 
-    public async Task DeleteAccount(Guid id)
+    public async Task DeleteAccount(int id)
     {
         Account account = await GetAccount(id);
         _context.Accounts.Remove(account);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Account> GetAccount(Guid id)
+    public async Task<Account> GetAccount(int id)
     {
         try
         {
@@ -110,7 +124,7 @@ public class ProductRepository : IProductsRepository
         }
     }
 
-    public async Task UpdatePassword(Guid id, string password)
+    public async Task UpdatePassword(int id, string password)
     {
         var account = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == id);
         if (account == null)
@@ -129,7 +143,7 @@ public class ProductRepository : IProductsRepository
         }
     }
 
-    public async Task UpdateEmail(Guid id, string email)
+    public async Task UpdateEmail(int id, string email)
     {
         var account = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == id);
         if (account == null)
@@ -145,6 +159,52 @@ public class ProductRepository : IProductsRepository
         catch (DbUpdateConcurrencyException)
         {
             throw new KeyNotFoundException("Account not found.");
+        }
+    }
+
+
+    public async Task<List<Cart>> GetCarts()
+    {
+        return await _context.Carts.ToListAsync();
+    }
+
+    public async Task DeleteCart(int id)
+    {
+        Cart cart = await GetCart(id);
+        _context.Carts.Remove(cart);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<Cart> GetCart(int id)
+    {
+        try
+        {
+            Cart cart = await _context.Carts.FindAsync(id);
+            return cart;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public async Task UpdateCart(int accountId, Product product)
+    {
+        var cart = await _context.Carts.FirstOrDefaultAsync(c => c.AccountId == accountId);
+        if (cart == null)
+        {
+            throw new KeyNotFoundException();
+        }
+        cart.AccountId = accountId;
+        cart.Products.Add(product);
+        _context.Carts.Update(cart);
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new KeyNotFoundException("Cart not found.");
         }
     }
 }

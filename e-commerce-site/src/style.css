@@ -45,11 +45,11 @@ footer ul li a{
   color: #59009D;
 }
 
-#faq{
+#faq-big{
   padding-left: 15px;
 }
 
-#about{
+#about-big{
   padding-right: 55px;
 }
 
@@ -95,17 +95,13 @@ b{
 }
 
 
-#cart-img{
-  height: 60px;
-  width: 60px;
-}
-
 
 
 .content {
   margin-top: 130px;
   margin-left: 50px; 
  margin-bottom: 150px;
+ height: fit-content;
 }
 
 .row{
@@ -140,6 +136,12 @@ b{
   gap: 0;
   grid-template-columns: auto 1fr;
   grid-auto-rows: min-content;
+  margin-bottom: 30px;
+}
+
+.cart-item img{
+  height: 25vh;
+  width: 25vh;
 }
 
 #description{
@@ -153,11 +155,13 @@ b{
   margin: 0;
   padding: 0;
   justify-self: end;
+  height: 60px;
+  width: 60px;
 }
 
 #description{
   grid-area: description;
-  font-size: 1.5rem;
+  font-size: 3rem;
   margin-left: 20px;
   display: flex;
   justify-content: center;
@@ -177,6 +181,7 @@ b{
   padding: 10px;
   width: 100%;
   height: 100%;
+  margin: auto;
 }
 
 .container div{
@@ -222,7 +227,7 @@ input{
   background-color: #59009D;
 }
 
-.login, .register{
+.login{
   color:#ff8dfd;
   background-color: #59009D;
   height: fit-content;
@@ -233,8 +238,103 @@ input{
   margin-bottom: 25px;
 }
 
+.register{
+  color:#ff8dfd;
+  background-color: #59009D;
+  height: fit-content;
+  width: fit-content;
+  border-radius: 10px;
+  padding: 5px;
+  margin-bottom: 25px;
+}
+
 .container p{
   font-size: 1.5rem;
+}
+
+form div label, form div button{
+  font-size: 3vh;
+}
+
+.small{
+  display: none;
+}
+
+.product-details h2{
+  margin-bottom: 10px;
+}
+
+.product-details img{
+  width: 25vw;
+  height: 25vw;
+}
+
+.details{
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.product-details button{
+  margin-top: 20px;
+  height: 50px;
+  width: 120px;
+  border-radius: 10px;
+  color:#ff8dfd;
+  background-color: #59009D;
+}
+
+.product-details p{
+  margin-top: 10px;
+}
+
+#description{
+  font-size: 1.5rem;
+}
+
+.product-details {
+  display: flex;
+  overflow: hidden;
+}
+
+#price{
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+@media screen  and (max-width: 1135px){
+
+  .small{
+    display: block;
+    display: flex;
+    flex-direction: row;
+    font-size: 1.5rem;
+    position: absolute;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  #faq-small{
+    padding-left: 15px;
+  }
+
+  #about-small{
+    padding-right: 55px;
+  }
+
+  .small a img{
+    width: 12vw;
+  }
+
+  #faq-big, #contact-big, #about-big{
+    display: none;
+  }
+  
+}
+@media screen and (min-width: 825px){
+  .small a img{
+    width: 8vw;
+  }
 }
 
 @media screen and (max-width: 750px){

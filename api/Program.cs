@@ -26,6 +26,7 @@ builder.Services.AddScoped<IProductsRepository, ProductRepository>();
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -42,7 +43,7 @@ app.UseCors(options =>
 
 app.MapPost("/postProduct", async ([FromBody] Product product, IProductsRepository repository) =>
 {
-    await repository.NewProduct(product.Name, product.Image, product.Colour, product.Price);
+    await repository.NewProduct(product.Name, product.Image, product.Colour, product.Price, product.Description);
     return Results.Ok(product);
 })
 .WithName("NewProduct")
@@ -56,7 +57,7 @@ app.MapGet("/getProducts", async (IProductsRepository repository) =>
 .WithName("GetProducts")
 .WithOpenApi();
 
-app.MapDelete("/deleteProduct", async (Guid id, IProductsRepository repository, [FromServices] ILogger<Program> logger) =>
+app.MapDelete("/deleteProduct", async (int id, IProductsRepository repository, [FromServices] ILogger<Program> logger) =>
 {
     try
     {
@@ -71,7 +72,7 @@ app.MapDelete("/deleteProduct", async (Guid id, IProductsRepository repository, 
 .WithName("DeleteProduct")
 .WithOpenApi();
 
-app.MapGet("/searchProduct", async (Guid id, IProductsRepository repository) =>
+app.MapGet("/searchProduct", async (int id, IProductsRepository repository) =>
 {
     var product = await repository.GetProduct(id);
     if (product != null)
@@ -83,7 +84,7 @@ app.MapGet("/searchProduct", async (Guid id, IProductsRepository repository) =>
 .WithName("GetProduct")
 .WithOpenApi();
 
-app.MapPut("/updateProduct", async (Guid id, string name, Uri image, string colour, float price, IProductsRepository repository) =>
+app.MapPut("/updateProduct", async (int id, string name, Uri image, string colour, float price, IProductsRepository repository) =>
 {
     var product = repository.GetProduct(id);
     await repository.UpdateProduct(id, name, image, colour, price);
@@ -99,6 +100,21 @@ app.MapGet("/getAccounts", async (IProductsRepository repository) =>
 .WithName("GetAccounts")
 .WithOpenApi();
 
+app.MapGet("/login/{username},{password}", async (string username, string password, IProductsRepository repository) =>
+{
+    var accounts = await repository.GetAccounts();
+    foreach (var account in accounts)
+    {
+        if (account.Username == username && account.Password == password)
+        {
+            return Results.Ok(account);
+        }
+    }
+    return Results.NotFound();
+})
+.WithName("Login")
+.WithOpenApi();
+
 app.MapPost("/newAccount", async ([FromBody] Account account, IProductsRepository repository) =>
 {
     await repository.NewAccount(account.Username, account.Password, account.Email);
@@ -108,7 +124,7 @@ app.MapPost("/newAccount", async ([FromBody] Account account, IProductsRepositor
 .WithOpenApi();
 
 
-app.MapPut("/updateEmail", async (Guid id, [FromBody] string email, IProductsRepository repository) =>
+app.MapPut("/updateEmail", async (int id, [FromBody] string email, IProductsRepository repository) =>
 {
     await repository.UpdateEmail(id, email);
     return Results.NoContent();
@@ -116,7 +132,7 @@ app.MapPut("/updateEmail", async (Guid id, [FromBody] string email, IProductsRep
 .WithName("UpdateEmail")
 .WithOpenApi();
 
-app.MapPut("/updatePassword", async (Guid id, [FromBody] string password, IProductsRepository repository) =>
+app.MapPut("/updatePassword", async (int id, [FromBody] string password, IProductsRepository repository) =>
 {
     await repository.UpdatePassword(id, password);
     return Results.NoContent();
@@ -124,7 +140,7 @@ app.MapPut("/updatePassword", async (Guid id, [FromBody] string password, IProdu
 .WithName("UpdatePassword")
 .WithOpenApi();
 
-app.MapDelete("/deleteAccount", async (Guid id, IProductsRepository repository) =>
+app.MapDelete("/deleteAccount", async (int id, IProductsRepository repository) =>
 {
     await repository.DeleteAccount(id);
     return Results.NoContent();
@@ -132,7 +148,7 @@ app.MapDelete("/deleteAccount", async (Guid id, IProductsRepository repository) 
 .WithName("DeleteAccount")
 .WithOpenApi();
 
-app.MapGet("/getAccount", async (Guid id, IProductsRepository repository) =>
+app.MapGet("/getAccount", async (int id, IProductsRepository repository) =>
 {
     var account = await repository.GetAccount(id);
     return account;
@@ -140,22 +156,64 @@ app.MapGet("/getAccount", async (Guid id, IProductsRepository repository) =>
 .WithName("GetAccount")
 .WithOpenApi();
 
+app.MapPut("/updateCart", async (int accountId, [FromBody] Product product, IProductsRepository repository) =>
+{
+    await repository.UpdateCart(accountId, product);
+    return Results.NoContent();
+})
+.WithName("UpdateCart")
+.WithOpenApi();
+
+app.MapGet("/getCarts", async (IProductsRepository repository) =>
+{
+    var carts = await repository.GetCarts();
+    return Results.Ok(carts);
+})
+.WithName("GetCarts")
+.WithOpenApi();
+
+app.MapGet("/getCart", async (int id, IProductsRepository repository) =>
+{
+    var cart = await repository.GetCart(id);
+    return Results.Ok(cart);
+})
+.WithName("GetCart")
+.WithOpenApi();
+
+app.MapDelete("/deleteCart", async (int id, IProductsRepository repository) =>
+{
+    await repository.DeleteCart(id);
+    return Results.NoContent();
+})
+.WithName("DeleteCart")
+.WithOpenApi();
+
 app.Run();
 
 public class Product
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 
     public Uri Image { get; set; }
     public string Name { get; set; }
     public string Colour { get; set; }
     public float Price { get; set; }
+    public string Description { get; set; }
 }
 
 public class Account
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
     public string Email { get; set; }
+    public Cart Cart { get; set; }
+}
+
+public class Cart
+{
+    public int Id { get; set; }
+    public int AccountId { get; set; }
+    public virtual Account Account { get; set; }
+    public virtual List<Product> Products { get; set; }
 }

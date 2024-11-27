@@ -1,17 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import reactDOM from "react-dom";
 import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import BASE_URL from "../main.js";
 import Navbar from "./navbar.jsx";
 import Footer from "./footer.jsx";
+import { AuthContext } from "./authcontext.jsx"; 
 
-function LandingPage() {
+function Products() {
 
+    const location = useLocation();
+    const { user} = useContext(AuthContext);
     const [products, setProducts] = useState([]);
     const [error, setError] = useState('')
     const [index, setIndex] = useState(0)
+    const navigate = useNavigate();
 
     useEffect(() => {
+
+        console.log("user", user.username);
         fetch(BASE_URL + encodeURIComponent('getProducts'))
         .then((response) => {
             console.log('Received response:', response);
@@ -28,13 +35,14 @@ function LandingPage() {
             console.error('Error:', error);
             setError(error.message);
         });
-}, []);
+}, [user]);
 
     return (
         <>
         <Navbar />
 
         <div className="content">
+            <h2>Welcome, {user.username || 'Guest'}</h2>
             <div className="row">
                 {screen.availWidth > 750 && products.slice(index, index + 10).map((product) => (
                     <div className="item" key={product.id}>
@@ -42,6 +50,10 @@ function LandingPage() {
                     <p className="name">{product.name}</p>
                     <p className="colour">{product.colour}</p>
                     <p className="price">£{product.price.toFixed(2)}</p>
+                    <button 
+                    className="view" 
+                    onClick={() => navigate(`/product/${product.id}`)}
+                >View</button>
                 </div>
                 ))}
                 {screen.availWidth <= 750  && screen.availWidth > 420 && products.slice(index, index + 9).map((product) => (
@@ -76,11 +88,5 @@ function LandingPage() {
     );
 }
 
-const root = reactDOM.createRoot(document.getElementById('app'))
-root.render(
-    <React.StrictMode>
-        <LandingPage />
-    </React.StrictMode>
-);
 
-export default LandingPage;
+export default Products;

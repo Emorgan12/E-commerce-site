@@ -1,15 +1,69 @@
-import React from "react";
+import { useState, useContext, useEffect } from 'react';
+import { useNavigate, useParams} from 'react-router-dom';
+import BASE_URL from '../main';
+import { AuthContext } from './authcontext.jsx';
+import Navbar from './navbar.jsx';
+import Footer from './footer.jsx';
 
-function Product(){
+const Product = () => {
 
-    return(
-        <div className="item" key={product.id}>
-            <img src={product.image} alt={product.name} />
-            <p className="name">{product.name}</p>
-            <p className="colour">{product.colour}</p>
-            <p className="price">£{product.price.toFixed(2)}</p>
-        </div>
-    )
+    const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
+    const [product, setProduct] = useState({});
+    const [error, setError] = useState('');
+    const { id } = useParams();
+
+    useEffect(() => {
+        fetch(`${BASE_URL}searchProduct?id=${id}`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Product not found');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            setProduct(data);
+        })
+        .catch((error) => {
+            setError(error.message);
+        });
+    }, [id]);
+    
+    const handleAddToCart = () => {
+        fetch(`${BASE_URL}updateCart?accountId=${user.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ product })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to add to cart');
+            navigate('/cart');
+        })
+        .catch(error => setError(error.message));
+    };
+
+    if (error) return <div>Error: {error}</div>;
+    if (!product) return <div>Loading...</div>;
+
+    return (
+        <>
+            <Navbar />
+            <div className='content'>
+                <div className="product-details">
+                    <img src={product.image} alt={product.name} />
+                    <div className='details'>
+                        <h2>{product.name}</h2>
+                        <p id='description'>{product.description}</p>
+                        <p id='price'>Price: £{product.price}</p>
+                        <button onClick={handleAddToCart}>Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            <Footer />
+        </>
+    );
 }
 
 export default Product;
