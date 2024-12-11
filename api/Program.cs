@@ -50,22 +50,13 @@ app.UseCors(options =>
     options.AllowAnyMethod();
 });
 
-app.MapPost("/postProduct", async ([FromBody] Product product, IProductsRepository repository) =>
+app.MapDelete("/deleteDiscount", async (int id, IProductsRepository repository) =>
 {
-    await repository.NewProduct(product.Name, product.Image, product.Colour, product.Price, product.Description);
-    return Results.Ok(product);
+    await repository.DeleteDiscount(id);
+    return Results.NoContent();
 })
-.WithName("NewProduct")
+.WithName("DeleteDiscount")
 .WithOpenApi();
-
-app.MapGet("/getProducts", async (IProductsRepository repository) =>
-{
-    var products = await repository.GetProducts();
-    return Results.Ok(products);
-})
-.WithName("GetProducts")
-.WithOpenApi();
-
 app.MapDelete("/deleteProduct", async (int id, IProductsRepository repository, [FromServices] ILogger<Program> logger) =>
 {
     try
@@ -80,6 +71,87 @@ app.MapDelete("/deleteProduct", async (int id, IProductsRepository repository, [
 })
 .WithName("DeleteProduct")
 .WithOpenApi();
+app.MapDelete("/deleteAccount", async (int id, IProductsRepository repository) =>
+{
+    await repository.DeleteAccount(id);
+    return Results.NoContent();
+})
+.WithName("DeleteAccount")
+.WithOpenApi();
+
+app.MapDelete("/deleteCart", async (int id, IProductsRepository repository) =>
+{
+    await repository.DeleteCart(id);
+    return Results.NoContent();
+})
+.WithName("DeleteCart")
+.WithOpenApi();
+app.MapPut("/updateProduct", async (int id, string name, string image, string colour, float price, IProductsRepository repository) =>
+{
+    var product = repository.GetProduct(id);
+    await repository.UpdateProduct(id, name, image, colour, price);
+})
+.WithName("UpdateProduct")
+.WithOpenApi();
+app.MapPut("/updateEmail", async (int id, [FromBody] string email, IProductsRepository repository) =>
+{
+    await repository.UpdateEmail(id, email);
+    return Results.NoContent();
+})
+.WithName("UpdateEmail")
+.WithOpenApi();
+
+app.MapPut("/updatePassword", async (int id, [FromBody] string password, IProductsRepository repository) =>
+{
+    await repository.UpdatePassword(id, password);
+    return Results.NoContent();
+})
+.WithName("UpdatePassword")
+.WithOpenApi();
+app.MapPut("/updateCart", async (int accountId, int productId, IProductsRepository repository) =>
+{
+    await repository.UpdateCart(accountId, productId);
+    return Results.NoContent();
+})
+.WithName("UpdateCart")
+.WithOpenApi();
+app.MapPut("/updateDiscount", async (int id, [FromBody] Discount discount, IProductsRepository repository) =>
+{
+    await repository.UpdateDiscount(id, discount.code, discount.discount);
+    return Results.NoContent();
+})
+.WithName("UpdateDiscount")
+.WithOpenApi();
+app.MapPost("/newAccount", async ([FromBody] Account account, IProductsRepository repository) =>
+{
+    await repository.NewAccount(account.Username, account.Password, account.Email);
+    return Results.Ok(account);
+})
+.WithName("NewAccount")
+.WithOpenApi();
+app.MapPost("/postProduct", async ([FromBody] Product product, IProductsRepository repository) =>
+{
+    await repository.NewProduct(product.name, product.image, product.colour, product.price, product.description);
+    return Results.Ok(product);
+})
+.WithName("NewProduct")
+.WithOpenApi();
+app.MapPost("/postDiscount", async ([FromBody] Discount discount, IProductsRepository repository) =>
+{
+    await repository.NewDiscount(discount.code, discount.discount);
+    return Results.Ok(discount);
+})
+.WithName("NewDiscount")
+.WithOpenApi();
+
+app.MapGet("/getProducts", async (IProductsRepository repository) =>
+{
+    var products = await repository.GetProducts();
+    return Results.Ok(products);
+})
+.WithName("GetProducts")
+.WithOpenApi();
+
 
 app.MapGet("/searchProduct", async (int id, IProductsRepository repository) =>
 {
@@ -93,13 +165,6 @@ app.MapGet("/searchProduct", async (int id, IProductsRepository repository) =>
 .WithName("GetProduct")
 .WithOpenApi();
 
-app.MapPut("/updateProduct", async (int id, string name, string image, string colour, float price, IProductsRepository repository) =>
-{
-    var product = repository.GetProduct(id);
-    await repository.UpdateProduct(id, name, image, colour, price);
-})
-.WithName("UpdateProduct")
-.WithOpenApi();
 
 app.MapGet("/getAccounts", async (IProductsRepository repository) =>
 {
@@ -124,38 +189,9 @@ app.MapGet("/login/{username},{password}", async (string username, string passwo
 .WithName("Login")
 .WithOpenApi();
 
-app.MapPost("/newAccount", async ([FromBody] Account account, IProductsRepository repository) =>
-{
-    await repository.NewAccount(account.Username, account.Password, account.Email);
-    return Results.Ok(account);
-})
-.WithName("NewAccount")
-.WithOpenApi();
 
 
-app.MapPut("/updateEmail", async (int id, [FromBody] string email, IProductsRepository repository) =>
-{
-    await repository.UpdateEmail(id, email);
-    return Results.NoContent();
-})
-.WithName("UpdateEmail")
-.WithOpenApi();
 
-app.MapPut("/updatePassword", async (int id, [FromBody] string password, IProductsRepository repository) =>
-{
-    await repository.UpdatePassword(id, password);
-    return Results.NoContent();
-})
-.WithName("UpdatePassword")
-.WithOpenApi();
-
-app.MapDelete("/deleteAccount", async (int id, IProductsRepository repository) =>
-{
-    await repository.DeleteAccount(id);
-    return Results.NoContent();
-})
-.WithName("DeleteAccount")
-.WithOpenApi();
 
 app.MapGet("/getAccount", async (int id, IProductsRepository repository) =>
 {
@@ -165,13 +201,6 @@ app.MapGet("/getAccount", async (int id, IProductsRepository repository) =>
 .WithName("GetAccount")
 .WithOpenApi();
 
-app.MapPut("/updateCart", async (int accountId, [FromBody] Product product, IProductsRepository repository) =>
-{
-    await repository.UpdateCart(accountId, product);
-    return Results.NoContent();
-})
-.WithName("UpdateCart")
-.WithOpenApi();
 
 app.MapGet("/getCarts", async (IProductsRepository repository) =>
 {
@@ -189,13 +218,26 @@ app.MapGet("/getCart", async (int id, IProductsRepository repository) =>
 .WithName("GetCart")
 .WithOpenApi();
 
-app.MapDelete("/deleteCart", async (int id, IProductsRepository repository) =>
+app.MapGet("/getDiscounts", async (IProductsRepository repository) =>
 {
-    await repository.DeleteCart(id);
-    return Results.NoContent();
+    var discounts = await repository.GetDiscounts();
+    return Results.Ok(discounts);
 })
-.WithName("DeleteCart")
+.WithName("GetDiscounts")
 .WithOpenApi();
+
+app.MapGet("/getDiscount", async (int id, IProductsRepository repository) =>
+{
+    var discount = await repository.GetDiscount(id);
+    if (discount != null)
+    {
+        return Results.Ok(discount);
+    }
+    return Results.NotFound();
+})
+.WithName("GetDiscount")
+.WithOpenApi();
+
 
 app.Run();
 
@@ -203,13 +245,15 @@ namespace ECommerceSite
 {
     public class Product
     {
-        public int Id { get; set; }
+        public int id { get; set; }
 
-        public string Image { get; set; }
-        public string Name { get; set; }
-        public string Colour { get; set; }
-        public float Price { get; set; }
-        public string Description { get; set; }
+        public string image { get; set; }
+        public string name { get; set; }
+        public string colour { get; set; }
+        public float price { get; set; }
+        public string description { get; set; }
+
+        public string category { get; set; }
     }
 
     public class Account
@@ -218,15 +262,20 @@ namespace ECommerceSite
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public Cart Cart { get; set; }
+        public int CartId { get; set; }
     }
 
     public class Cart
     {
         public int Id { get; set; }
         public int AccountId { get; set; }
-        [JsonIgnore]
-        public Account Account { get; set; }
         public List<Product> Products { get; set; }
+    }
+
+    public class Discount
+    {
+        public int id { get; set; }
+        public string code { get; set; }
+        public float discount { get; set; }
     }
 }

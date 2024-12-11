@@ -281,7 +281,7 @@ form div label, form div button{
   margin-left: 20px;
 }
 
-.product-details button{
+button{
   margin-top: 20px;
   height: 50px;
   width: 120px;
@@ -386,6 +386,26 @@ form div label, form div button{
 }
 #about p {
   margin-bottom: 15px;
+}
+
+.checkout{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-top: 20px;
+}
+
+
+table, th, td{
+  border: #59009D 2px solid;
+  border-collapse: collapse;
+  padding: 10px;
+  font-size: 2rem;
+  width: 50%;
+}
+
+#username{
+  text-transform: capitalize;
 }
 
 @media screen  and (max-width: 1135px){

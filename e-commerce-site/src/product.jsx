@@ -30,12 +30,11 @@ const Product = () => {
     }, [id]);
     
     const handleAddToCart = () => {
-        fetch(`${BASE_URL}updateCart?accountId=${user.id}`, {
+        fetch(`${BASE_URL}updateCart?accountId=${user.id}&productId=${product.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ product })
         })
         .then(response => {
             if (!response.ok) throw new Error('Failed to add to cart');

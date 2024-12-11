@@ -4,33 +4,36 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using ECommerceSite;
+using Microsoft.Extensions.Logging;
 
 
 public class ProductRepository : IProductsRepository
 {
     private readonly DataContext _context;
+    private readonly ILogger<ProductRepository> _logger;
     Random random = new Random();
 
-
-    public ProductRepository(DataContext context)
+    public ProductRepository(DataContext context, ILogger<ProductRepository> logger)
     {
         _context = context;
+        _logger = logger;
     }
+
 
     public async Task<List<Product>> GetProducts()
     {
         return await _context.Products.ToListAsync();
     }
 
-    public async Task NewProduct(string name, string image, string colour, float price, string description)
+    public async Task NewProduct(string Pname, string Pimage, string Pcolour, float Pprice, string Pdescription)
     {
         var product = new Product
         {
-            Name = name,
-            Image = image,
-            Colour = colour,
-            Price = price,
-            Description = description
+            name = Pname,
+            image = Pimage ?? throw new ArgumentNullException(nameof(Pimage), "Image cannot be null."),
+            colour = Pcolour,
+            price = Pprice,
+            description = Pdescription
         };
 
         await _context.Products.AddAsync(product);
@@ -59,15 +62,15 @@ public class ProductRepository : IProductsRepository
 
     public async Task UpdateProduct(int id, string name, string image, string colour, float price)
     {
-        var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        var product = await _context.Products.FirstOrDefaultAsync(p => p.id == id);
         if (product == null)
         {
             throw new KeyNotFoundException();
         }
-        product.Name = name;
-        product.Image = image;
-        product.Colour = colour;
-        product.Price = price;
+        product.name = name;
+        product.image = image;
+        product.colour = colour;
+        product.price = price;
         _context.Products.Update(product);
         try
         {
@@ -93,9 +96,16 @@ public class ProductRepository : IProductsRepository
             Id = random.Next(),
             Username = username,
             Password = password,
-            Email = email,
-            Cart = new Cart()
+            Email = email
         };
+        var cart = new Cart
+        {
+            AccountId = account.Id,
+            Products = new List<Product>()
+        };
+        await _context.Carts.AddAsync(cart);
+        await _context.SaveChangesAsync();
+        account.CartId = cart.Id;
         await _context.Accounts.AddAsync(account);
         await _context.SaveChangesAsync();
         return account;
@@ -181,7 +191,11 @@ public class ProductRepository : IProductsRepository
     {
         try
         {
-            Cart cart = await _context.Carts.FindAsync(id);
+            Cart cart = await _context.Carts.Include(c => c.Products).FirstOrDefaultAsync(c => c.Id == id);
+            if (cart != null && cart.Products == null)
+            {
+                cart.Products = new List<Product>();
+            }
             return cart;
         }
         catch
@@ -190,23 +204,103 @@ public class ProductRepository : IProductsRepository
         }
     }
 
-    public async Task UpdateCart(int accountId, Product product)
+    public async Task UpdateCart(int accountId, int productId)
     {
-        var cart = await _context.Carts.FirstOrDefaultAsync(c => c.AccountId == accountId);
+        var cart = await _context.Carts.Include(c => c.Products).FirstOrDefaultAsync(c => c.AccountId == accountId);
         if (cart == null)
+        {
+            cart = new Cart
+            {
+                AccountId = accountId,
+                Products = new List<Product>()
+            };
+            await _context.Carts.AddAsync(cart);
+        }
+        else if (cart.Products == null)
+        {
+            cart.Products = new List<Product>();
+        }
+
+        var product = cart.Products.FirstOrDefault(p => p.id == productId);
+        if (product != null)
+        {
+            throw new Exception("Product already in cart");
+        }
+        else
+        {
+            product = await _context.Products.FirstOrDefaultAsync(p => p.id == productId);
+            if (product == null)
+            {
+                throw new KeyNotFoundException("Product not found.");
+            }
+            _logger.LogInformation(new EventId(0, "ProductAddedToCart"), $"Adding product {product.name} to cart {cart.Id}");
+
+            cart.Products.Add(product);
+            _context.Carts.Update(cart);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new KeyNotFoundException("Cart not found.");
+            }
+        }
+    }
+
+    public async Task NewDiscount(string code, float percentage)
+    {
+        var discount = new Discount
+        {
+            code = code,
+            discount = percentage
+        };
+        await _context.Discounts.AddAsync(discount);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Discount>> GetDiscounts()
+    {
+        return await _context.Discounts.ToListAsync();
+    }
+
+    public async Task DeleteDiscount(int id)
+    {
+        Discount discount = await GetDiscount(id);
+        _context.Discounts.Remove(discount);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<Discount> GetDiscount(int id)
+    {
+        try
+        {
+            Discount discount = await _context.Discounts.FindAsync(id);
+            return discount;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public async Task UpdateDiscount(int id, string code, float percentage)
+    {
+        var discount = await _context.Discounts.FirstOrDefaultAsync(d => d.id == id);
+        if (discount == null)
         {
             throw new KeyNotFoundException();
         }
-        cart.AccountId = accountId;
-        cart.Products.Add(product);
-        _context.Carts.Update(cart);
+        discount.code = code;
+        discount.discount = percentage;
+        _context.Discounts.Update(discount);
         try
         {
             await _context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
         {
-            throw new KeyNotFoundException("Cart not found.");
+            throw new KeyNotFoundException("Discount not found.");
         }
     }
 }

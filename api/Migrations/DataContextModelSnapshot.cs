@@ -21,6 +21,9 @@ namespace api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("CartId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -34,6 +37,9 @@ namespace api.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CartId")
+                        .IsUnique();
 
                     b.ToTable("Accounts");
                 });
@@ -49,56 +55,69 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId")
-                        .IsUnique();
-
                     b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("ECommerceSite.Discount", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("code")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("discount")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Discounts");
                 });
 
             modelBuilder.Entity("ECommerceSite.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("CartId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Colour")
+                    b.Property<string>("colour")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("description")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Image")
+                    b.Property<string>("image")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("Price")
+                    b.Property<float>("price")
                         .HasColumnType("REAL");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
                     b.HasIndex("CartId");
 
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("ECommerceSite.Cart", b =>
+            modelBuilder.Entity("ECommerceSite.Account", b =>
                 {
-                    b.HasOne("ECommerceSite.Account", "Account")
-                        .WithOne("Cart")
-                        .HasForeignKey("ECommerceSite.Cart", "AccountId")
+                    b.HasOne("ECommerceSite.Cart", null)
+                        .WithOne()
+                        .HasForeignKey("ECommerceSite.Account", "CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("ECommerceSite.Product", b =>
@@ -107,12 +126,6 @@ namespace api.Migrations
                         .WithMany("Products")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ECommerceSite.Account", b =>
-                {
-                    b.Navigation("Cart")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ECommerceSite.Cart", b =>

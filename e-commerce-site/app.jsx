@@ -7,6 +7,7 @@ import Cart from './src/cart';
 import Product from './src/product';
 import FAQ from './src/faq';
 import About from './src/about';
+import Checkout from './src/checkout'
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/product/:id" element={<Product />} />
             <Route path='/faq' element={<FAQ />} />
             <Route path='/about' element={<About />} />
+            <Route path='/checkout' element={<Checkout />}/>
         </Routes>
     );
 }

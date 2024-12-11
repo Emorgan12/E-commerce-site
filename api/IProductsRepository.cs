@@ -21,5 +21,12 @@ public interface IProductsRepository
     Task<List<Cart>> GetCarts();
     Task DeleteCart(int id);
     Task<Cart> GetCart(int id);
-    Task UpdateCart(int accountId, Product product);
+    Task UpdateCart(int accountId, int productId);
+
+    Task NewDiscount(string code, float percentage);
+    Task<List<Discount>> GetDiscounts();
+    Task DeleteDiscount(int id);
+    Task<Discount> GetDiscount(int id);
+    Task UpdateDiscount(int id, string code, float percentage);
+
 }
