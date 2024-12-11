@@ -6,12 +6,12 @@ using ECommerceSite;
 public interface IProductsRepository
 {
     Task<List<Product>> GetProducts();
-    Task NewProduct(string name, string image, string colour, float price, string description);
+    Task NewProduct(string name, string image, string colour, float price, string description, string size, string material, string OriginCountry, int quantity, string category);
     Task DeleteProduct(int id);
     Task<Product> GetProduct(int id);
-    Task UpdateProduct(int id, string name, string image, string colour, float price);
+    Task UpdateProduct(int id, string name, string image, string colour, float price, string description, string size, string material, string OriginCountry, int quantity, string category);
 
-    Task<Account> NewAccount(string username, string password, string email);
+    Task<Account> NewAccount(string username, string password, string email, string Admin);
     Task<List<Account>> GetAccounts();
     Task DeleteAccount(int id);
     Task<Account> GetAccount(int id);
@@ -28,5 +28,16 @@ public interface IProductsRepository
     Task DeleteDiscount(int id);
     Task<Discount> GetDiscount(int id);
     Task UpdateDiscount(int id, string code, float percentage);
+
+    Task<Review> NewReview(int rating, string review, int productId);
+    Task<List<Review>> GetReviews();
+    Task<Review> GetReview(int id);
+    Task DeleteReview(int id);
+    Task UpdateReview(int id, int rating, string review);
+
+    Task<String> NewOrder(List<int> productIds, int accountId);
+    Task<List<Order>> GetOrders();
+    Task<Order> GetOrder(int id);
+    Task DeleteOrder(int id);
 
 }

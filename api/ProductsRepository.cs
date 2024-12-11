@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using ECommerceSite;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 public class ProductRepository : IProductsRepository
@@ -25,15 +26,20 @@ public class ProductRepository : IProductsRepository
         return await _context.Products.ToListAsync();
     }
 
-    public async Task NewProduct(string Pname, string Pimage, string Pcolour, float Pprice, string Pdescription)
+    public async Task NewProduct(string Pname, string Pimage, string Pcolour, float Pprice, string Pdescription, string Psize, string Pmaterial, string POriginCountry, int Pquantity, string Pcategory)
     {
         var product = new Product
         {
             name = Pname,
-            image = Pimage ?? throw new ArgumentNullException(nameof(Pimage), "Image cannot be null."),
+            image = Pimage,
             colour = Pcolour,
             price = Pprice,
-            description = Pdescription
+            description = Pdescription,
+            size = Psize,
+            material = Pmaterial,
+            originCountry = POriginCountry,
+            quantity = Pquantity,
+            category = Pcategory
         };
 
         await _context.Products.AddAsync(product);
@@ -51,7 +57,7 @@ public class ProductRepository : IProductsRepository
     {
         try
         {
-            Product product = await _context.Products.FindAsync(id);
+            Product product = await _context.Products.Include(p => p.reviews).FirstOrDefaultAsync(p => p.id == id);
             return product;
         }
         catch
@@ -60,17 +66,23 @@ public class ProductRepository : IProductsRepository
         }
     }
 
-    public async Task UpdateProduct(int id, string name, string image, string colour, float price)
+    public async Task UpdateProduct(int id, string Pname, string Pimage, string Pcolour, float Pprice, string Pdescription, string Psize, string Pmaterial, string POriginCountry, int Pquantity, string Pcategory)
     {
         var product = await _context.Products.FirstOrDefaultAsync(p => p.id == id);
         if (product == null)
         {
             throw new KeyNotFoundException();
         }
-        product.name = name;
-        product.image = image;
-        product.colour = colour;
-        product.price = price;
+        product.name = Pname;
+        product.image = Pimage;
+        product.colour = Pcolour;
+        product.price = Pprice;
+        product.description = Pdescription;
+        product.size = Psize;
+        product.material = Pmaterial;
+        product.originCountry = POriginCountry;
+        product.quantity = Pquantity;
+        product.category = Pcategory;
         _context.Products.Update(product);
         try
         {
@@ -82,7 +94,7 @@ public class ProductRepository : IProductsRepository
         }
     }
 
-    public async Task<Account> NewAccount(string username, string password, string email)
+    public async Task<Account> NewAccount(string username, string password, string email, string Admin)
     {
         foreach (var accountInList in _context.Accounts)
         {
@@ -96,7 +108,8 @@ public class ProductRepository : IProductsRepository
             Id = random.Next(),
             Username = username,
             Password = password,
-            Email = email
+            Email = email,
+            Admin = Admin
         };
         var cart = new Cart
         {
@@ -302,5 +315,131 @@ public class ProductRepository : IProductsRepository
         {
             throw new KeyNotFoundException("Discount not found.");
         }
+    }
+
+    public async Task<Review> NewReview(int rating, string review, int productId)
+    {
+        var product = await _context.Products.FirstOrDefaultAsync(p => p.id == productId);
+        if (product == null)
+        {
+            throw new KeyNotFoundException("Product not found.");
+        }
+        var reviewObj = new Review
+        {
+            Rating = rating,
+            review = review,
+            reviewProductId = productId
+        };
+        await _context.Reviews.AddAsync(reviewObj);
+        await _context.SaveChangesAsync();
+        return reviewObj;
+    }
+
+    public async Task<Review> GetReview(int id)
+    {
+        try
+        {
+            var review = await _context.Reviews.FindAsync(id);
+            return review;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public async Task<List<Review>> GetReviews()
+    {
+        return await _context.Reviews.ToListAsync();
+    }
+
+    public async Task UpdateReview(int id, int rating, string review)
+    {
+        var Review = await _context.Reviews.FirstOrDefaultAsync(r => r.id == id);
+        Review.review = review;
+        Review.Rating = rating;
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteReview(int id)
+    {
+        var review = await _context.Reviews.FirstOrDefaultAsync(r => r.id == id);
+        if (review != null)
+        {
+            _context.Reviews.Remove(review);
+            await _context.SaveChangesAsync();
+        }
+
+    }
+
+    public List<Product> getProductsFromList(List<int> ProductIds)
+    {
+        List<Product> productsList = new List<Product>();
+
+        foreach (int id in ProductIds)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.id == id);
+            if (product != null)
+            {
+                productsList.Add(product);
+                _logger.LogInformation($"Purchased product {product.name}");
+            }
+            else
+            {
+                return null;
+            }
+        }
+        return productsList;
+    }
+
+    public async Task<String> NewOrder(List<int> ProductIds, int accountId)
+    {
+        var account = _context.Accounts.FirstOrDefault(a => a.Id == accountId);
+        if (account != null)
+        {
+            var productsList = getProductsFromList(ProductIds);
+            _logger.LogInformation("Products:");
+            foreach (var product in productsList)
+            {
+                _logger.LogInformation(product.name);
+            }
+            var order = new Order
+            {
+                products = productsList,
+                orderAccountId = accountId,
+                dateCreated = DateTime.Now
+            };
+
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+            return "Order created successfully";
+        }
+        return "Account not found";
+    }
+
+    public async Task<List<Order>> GetOrders()
+    {
+        return await _context.Orders.ToListAsync();
+    }
+
+    public async Task<Order> GetOrder(int id)
+    {
+        try
+        {
+            var order = await _context.Orders.FindAsync(id);
+            return order;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public async Task DeleteOrder(int id)
+    {
+        var order = await _context.Orders.FirstOrDefaultAsync(o => o.id == id);
+        _context.Orders.Remove(order);
+        await _context.SaveChangesAsync();
     }
 }

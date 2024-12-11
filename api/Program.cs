@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 using ECommerceSite;
+using System.IO.Compression;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,10 +87,27 @@ app.MapDelete("/deleteCart", async (int id, IProductsRepository repository) =>
 })
 .WithName("DeleteCart")
 .WithOpenApi();
-app.MapPut("/updateProduct", async (int id, string name, string image, string colour, float price, IProductsRepository repository) =>
+
+app.MapDelete("/deleteReview", async (int id, IProductsRepository repository) =>
+{
+    await repository.DeleteReview(id);
+    return Results.NoContent();
+})
+.WithName("DeleteReview")
+.WithOpenApi();
+
+app.MapDelete("/deleteOrder", async (int id, IProductsRepository repository) =>
+{
+    await repository.DeleteOrder(id);
+    return Results.NoContent;
+})
+.WithName("DeleteOrder")
+.WithOpenApi();
+
+app.MapPut("/updateProduct", async (int id, string name, string image, string colour, float price, string description, string size, string material, string OriginCountry, int quantity, string category, IProductsRepository repository) =>
 {
     var product = repository.GetProduct(id);
-    await repository.UpdateProduct(id, name, image, colour, price);
+    await repository.UpdateProduct(id, name, image, colour, price, description, size, material, OriginCountry, quantity, category);
 })
 .WithName("UpdateProduct")
 .WithOpenApi();
@@ -122,16 +140,25 @@ app.MapPut("/updateDiscount", async (int id, [FromBody] Discount discount, IProd
 })
 .WithName("UpdateDiscount")
 .WithOpenApi();
+
+app.MapPut("/updateReview", async (int id, int rating, string review, IProductsRepository repository) =>
+{
+    await repository.UpdateReview(id, rating, review);
+
+})
+.WithName("UpdateReview")
+.WithOpenApi();
+
 app.MapPost("/newAccount", async ([FromBody] Account account, IProductsRepository repository) =>
 {
-    await repository.NewAccount(account.Username, account.Password, account.Email);
+    await repository.NewAccount(account.Username, account.Password, account.Email, account.Admin);
     return Results.Ok(account);
 })
 .WithName("NewAccount")
 .WithOpenApi();
 app.MapPost("/postProduct", async ([FromBody] Product product, IProductsRepository repository) =>
 {
-    await repository.NewProduct(product.name, product.image, product.colour, product.price, product.description);
+    await repository.NewProduct(product.name, product.image, product.colour, product.price, product.description, product.size, product.material, product.originCountry, product.quantity, product.category);
     return Results.Ok(product);
 })
 .WithName("NewProduct")
@@ -142,6 +169,23 @@ app.MapPost("/postDiscount", async ([FromBody] Discount discount, IProductsRepos
     return Results.Ok(discount);
 })
 .WithName("NewDiscount")
+.WithOpenApi();
+
+app.MapPost("/postReview", async ([FromBody] Review review, IProductsRepository repository) =>
+{
+    await repository.NewReview(review.Rating, review.review, review.reviewProductId);
+    return Results.Ok(review);
+})
+.WithName("NewReview")
+.WithOpenApi();
+
+app.MapPost("/postOrder", async (List<int> productIds, int accountId, IProductsRepository repository) =>
+{
+    var order = await repository.NewOrder(productIds, accountId);
+    return order;
+
+})
+.WithName("NewOrder")
 .WithOpenApi();
 
 app.MapGet("/getProducts", async (IProductsRepository repository) =>
@@ -189,10 +233,6 @@ app.MapGet("/login/{username},{password}", async (string username, string passwo
 .WithName("Login")
 .WithOpenApi();
 
-
-
-
-
 app.MapGet("/getAccount", async (int id, IProductsRepository repository) =>
 {
     var account = await repository.GetAccount(id);
@@ -238,6 +278,46 @@ app.MapGet("/getDiscount", async (int id, IProductsRepository repository) =>
 .WithName("GetDiscount")
 .WithOpenApi();
 
+app.MapGet("/getReviews", async (IProductsRepository repository) =>
+{
+
+    var reviews = await repository.GetReviews();
+    return Results.Ok(reviews);
+})
+.WithName("GetReviews")
+.WithOpenApi();
+
+app.MapGet("/getReview", async (int id, IProductsRepository repository) =>
+{
+    var review = await repository.GetReview(id);
+    if (review != null)
+    {
+        return Results.Ok(review);
+    }
+    return Results.NotFound();
+})
+.WithName("GetReview")
+.WithOpenApi();
+
+app.MapGet("/getOrders", async (IProductsRepository repository) =>
+{
+    var orders = await repository.GetOrders();
+    return Results.Ok(orders);
+})
+.WithName("GetOrders")
+.WithOpenApi();
+
+app.MapGet("/getOrder", async (int id, IProductsRepository repository) =>
+{
+    var order = await repository.GetOrder(id);
+    if (order != null)
+    {
+        return Results.Ok(order);
+    }
+    return Results.NotFound();
+})
+.WithName("GetOrder")
+.WithOpenApi();
 
 app.Run();
 
@@ -252,8 +332,14 @@ namespace ECommerceSite
         public string colour { get; set; }
         public float price { get; set; }
         public string description { get; set; }
-
+        public string size { get; set; }
+        public string material { get; set; }
+        public string originCountry { get; set; }
+        public int quantity { get; set; }
         public string category { get; set; }
+        [JsonIgnore]
+        public List<Review> reviews { get; set; }
+
     }
 
     public class Account
@@ -263,6 +349,9 @@ namespace ECommerceSite
         public string Password { get; set; }
         public string Email { get; set; }
         public int CartId { get; set; }
+        public string Admin { get; set; }
+        [JsonIgnore]
+        public List<Order> orders { get; set; }
     }
 
     public class Cart
@@ -277,5 +366,22 @@ namespace ECommerceSite
         public int id { get; set; }
         public string code { get; set; }
         public float discount { get; set; }
+    }
+
+    public class Review
+    {
+        public int id { get; set; }
+        public int Rating { get; set; }
+        public string review { get; set; }
+        public int reviewProductId { get; set; }
+        public int orderId { get; set; }
+    }
+
+    public class Order
+    {
+        public int id { get; set; }
+        public List<Product> products { get; set; }
+        public int orderAccountId { get; set; }
+        public DateTime dateCreated { get; set; }
     }
 }
