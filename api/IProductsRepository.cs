@@ -11,7 +11,7 @@ public interface IProductsRepository
     Task<Product> GetProduct(int id);
     Task UpdateProduct(int id, string name, string image, string colour, float price, string description, string size, string material, string OriginCountry, int quantity, string category);
 
-    Task<Account> NewAccount(string username, string password, string email, string Admin);
+    Task<Account> NewAccount(string username, string password, string email, bool Admin);
     Task<List<Account>> GetAccounts();
     Task DeleteAccount(int id);
     Task<Account> GetAccount(int id);

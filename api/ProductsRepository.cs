@@ -94,7 +94,7 @@ public class ProductRepository : IProductsRepository
         }
     }
 
-    public async Task<Account> NewAccount(string username, string password, string email, string Admin)
+    public async Task<Account> NewAccount(string username, string password, string email, bool Admin)
     {
         foreach (var accountInList in _context.Accounts)
         {
@@ -105,7 +105,6 @@ public class ProductRepository : IProductsRepository
         }
         var account = new Account
         {
-            Id = random.Next(),
             Username = username,
             Password = password,
             Email = email,
@@ -396,13 +395,22 @@ public class ProductRepository : IProductsRepository
     public async Task<String> NewOrder(List<int> ProductIds, int accountId)
     {
         var account = _context.Accounts.FirstOrDefault(a => a.Id == accountId);
+        var productsList = new List<Product>();
         if (account != null)
         {
-            var productsList = getProductsFromList(ProductIds);
             _logger.LogInformation("Products:");
-            foreach (var product in productsList)
+            foreach (var product in ProductIds)
             {
-                _logger.LogInformation(product.name);
+                var productObj = _context.Products.FirstOrDefault(p => p.id == product);
+                if (productObj != null)
+                {
+                    productsList.Add(productObj);
+                    _logger.LogInformation($"Product: {productObj.name}");
+                }
+                else
+                {
+                    return "Product not found";
+                }
             }
             var order = new Order
             {

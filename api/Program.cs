@@ -349,7 +349,7 @@ namespace ECommerceSite
         public string Password { get; set; }
         public string Email { get; set; }
         public int CartId { get; set; }
-        public string Admin { get; set; }
+        public bool Admin { get; set; }
         [JsonIgnore]
         public List<Order> orders { get; set; }
     }

@@ -8,6 +8,8 @@ import Product from './src/product';
 import FAQ from './src/faq';
 import About from './src/about';
 import Checkout from './src/checkout'
+import NewProduct from './src/new-product'
+import Dashboard from './src/dashboard';
 
 function App() {
     return (
@@ -20,6 +22,8 @@ function App() {
             <Route path='/faq' element={<FAQ />} />
             <Route path='/about' element={<About />} />
             <Route path='/checkout' element={<Checkout />}/>
+            <Route path='/new-product' element={<NewProduct />}/>
+            <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
     );
 }

@@ -1,28 +1,31 @@
-*{
-  font-family: Georgia, 'Times New Roman', Times, serif;
+:root {
+  --main: #ffaaf7;
+  --secondary: #ca85fb;
+  --text: #000000;
+  --link: #0000c8;
+}
+
+* {
+  font-family: Georgia, "Times New Roman", Times, serif;
   margin: 0;
   padding: 0;
 }
 
-html{
-  width: 90vw;
-  height: 90vh;
-}
-body{
-  background-color: #ff8dfd;
-  color: #59009D;
+body {
+  background-color: var(--main);
+  color: var(--text);
 }
 
-html, body {
-  height: 100%;
+html,
+body {
   margin: 0; /* Reset default margins */
 }
 
-#mobile{
+#mobile {
   display: none;
 }
 footer {
-  background-color: #ffb7fe;
+  background-color: var(--secondary);
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -45,20 +48,20 @@ footer ul li {
   display: block;
 }
 
-footer ul li a{
+footer ul li a {
   padding: 5px;
-  color: #59009D;
+  color: var(--link);
 }
 
-#faq-big{
+#faq-big {
   padding-left: 15px;
 }
 
-#about-big{
+#about-big {
   padding-right: 55px;
 }
 
-nav ul{
+nav ul {
   list-style: none;
   display: flex;
   flex-direction: row;
@@ -70,74 +73,69 @@ nav ul{
   justify-content: space-around;
 }
 
-nav ul li{
- display: block;
+nav ul li {
+  display: block;
 }
 
-
-nav{
-  background-color: #ffb7fe;
+nav {
+  background-color: var(--secondary);
   top: 0;
   position: fixed;
   width: 100%;
   height: 100px;
 }
-b{
+b {
   font-size: 2rem;
 }
 
-#home img{
+#home img {
   height: 50px;
   width: 50px;
 }
 
-#cart{
-  margin: 0 20px 0 0 ;
+#cart {
+  margin: 0 20px 0 0;
 }
 
-#home{
+#home {
   margin: 0 0 0 20px;
 }
 
-
-
-
 .content {
   margin-top: 130px;
-  margin-left: 50px; 
- margin-bottom: 150px;
- height: fit-content;
+  margin-left: 50px;
+  margin-bottom: 150px;
 }
 
-.row{
+.row {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
 }
 
-.item{
+.item {
   flex: 1 1 20%;
   margin-bottom: 30px;
 }
 
-.name, .colour{
+.name,
+.colour {
   font-size: 3vh;
 }
 
-.price{
+.price {
   font-size: 3.5vh;
   font-weight: 700;
 }
 
-.item img{
+.item img {
   width: 12vw;
   height: 12vw;
 }
 
-.cart-item{
+.cart-item {
   display: grid;
-  grid-template-areas: 
-    'img description'; 
+  grid-template-areas: "img description";
   gap: 0;
   grid-template-columns: auto 1fr;
   grid-auto-rows: min-content;
@@ -145,18 +143,18 @@ b{
   margin-top: 10px;
 }
 
-.cart-item img{
+.cart-item img {
   height: 25vh;
   width: 25vh;
 }
 
-#description{
+#description {
   text-align: left;
   margin: 0;
   padding: 0;
 }
 
-#cart-img{
+#cart-img {
   grid-area: img;
   margin: 0;
   padding: 0;
@@ -165,7 +163,7 @@ b{
   width: 60px;
 }
 
-#description{
+#description {
   grid-area: description;
   font-size: 3rem;
   margin-left: 20px;
@@ -175,11 +173,11 @@ b{
   margin-right: 20px;
 }
 
-.item-details{
+.item-details {
   margin-left: 10px;
 }
 
-.container{
+.container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -190,52 +188,52 @@ b{
   margin: auto;
 }
 
-.container div{
+.container div {
   padding: 10px;
 }
 
-label{
+label {
   font-size: 2rem;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   font-weight: 700;
 }
-input{
+input {
   width: 100%;
   height: 75px;
   margin-bottom: 1rem;
   font-size: 3.5vw;
   border: none;
-  background-color: #59009D;
-  color: #ffb7fe;
+  background-color: var(--secondary);
+  color: var(--text);
   padding: 10px;
   border-radius: 15px;
 }
 
-.next{
+.next {
   position: absolute;
   right: 100px;
   top: 50%;
-  color:#ff8dfd;
-  background-color: #59009D;
+  color: var(--text);
+  background-color: var(--secondary);
   height: 50px;
   width: 120px;
   border-radius: 10px;
 }
 
-.previous{
+.previous {
   height: 50px;
   width: 120px;
   border-radius: 10px;
   position: absolute;
   right: 100px;
   top: 57%;
-  color:#ff8dfd;
-  background-color: #59009D;
+  color: var(--text);
+  background-color: var(--secondary);
 }
 
-.login{
-  color:#ff8dfd;
-  background-color: #59009D;
+.login {
+  color: var(--text);
+  background-color: var(--secondary);
   height: fit-content;
   width: fit-content;
   border-radius: 10px;
@@ -244,9 +242,9 @@ input{
   margin-bottom: 25px;
 }
 
-.register{
-  color:#ff8dfd;
-  background-color: #59009D;
+.register {
+  color: var(--text);
+  background-color: var(--secondary);
   height: fit-content;
   width: fit-content;
   border-radius: 10px;
@@ -254,47 +252,49 @@ input{
   margin-bottom: 25px;
 }
 
-.container p{
+.container p {
   font-size: 1.5rem;
 }
 
-form div label, form div button{
+form div label,
+form div button {
   font-size: 3vh;
 }
 
-.small{
+.small {
   display: none;
 }
 
-.product-details h2{
+.product-details h2 {
   margin-bottom: 10px;
 }
 
-.product-details img{
+.product-details img {
   width: 25vw;
   height: 25vw;
 }
 
-.details{
+.details {
   display: flex;
   flex-direction: column;
   margin-left: 20px;
 }
 
-button{
+button {
   margin-top: 20px;
   height: 50px;
   width: 120px;
+  border: 2px solid var(--text);
   border-radius: 10px;
-  color:#ff8dfd;
-  background-color: #59009D;
+  color: var(--text);
+  background-color: var(--secondary);
 }
 
-.product-details p{
+.product-details p {
   margin-top: 10px;
 }
 
-#description{
+#description {
   font-size: 1.5rem;
 }
 
@@ -303,13 +303,13 @@ button{
   overflow: hidden;
 }
 
-#price{
+#price {
   font-size: 2rem;
   font-weight: 700;
 }
 
-.collapsible-header{
-  background-color: #ffb7fe;
+.collapsible-header {
+  background-color: var(--secondary);
   border: none;
   border-radius: 20px;
   padding: 10px 50px;
@@ -318,48 +318,53 @@ button{
   height: fit-content;
   margin-bottom: 10px;
   margin-top: 20px;
-  color: #59009D;
+  color: var(--text);
 }
 
-.questions{
+.questions {
   margin-left: 15px;
 }
 
-.questions div{
+.questions div {
   margin-bottom: 10px;
 }
 
-#email{
+#email {
   display: flex;
   align-items: center;
 }
 
-#email-icon{
+#email-icon {
   width: 60px;
   margin-right: 10px;
 }
 
-#email p{
+#email p {
   font-size: 1.5rem;
 }
 
-.about-head{
+.about-head {
   margin-bottom: 10px;
 }
 
-.about-subhead{
+.about-subhead {
   margin: 15px;
 }
 
-.about-content{
+.about-content {
   margin-left: 20px;
 }
 
-.content{
+.content {
   max-height: 85vh;
   width: 90vw;
   overflow-y: auto;
-  word-wrap: break-words;
+  overflow-x: hidden;
+}
+
+.admin-checkbox {
+  display: flex;
+  align-items: center;
 }
 
 .about-head {
@@ -388,29 +393,29 @@ button{
   margin-bottom: 15px;
 }
 
-.checkout{
+.checkout {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   margin-top: 20px;
 }
 
-
-table, th, td{
-  border: #59009D 2px solid;
+table,
+th,
+td {
+  border: var(--text) 2px solid;
   border-collapse: collapse;
   padding: 10px;
   font-size: 2rem;
   width: 50%;
 }
 
-#username{
+#username {
   text-transform: capitalize;
 }
 
-@media screen  and (max-width: 1135px){
-
-  .small{
+@media screen and (max-width: 1135px) {
+  .small {
     display: block;
     display: flex;
     flex-direction: row;
@@ -420,42 +425,41 @@ table, th, td{
     justify-content: space-between;
   }
 
-  #faq-small{
+  #faq-small {
     padding-left: 15px;
   }
 
-  #about-small{
+  #about-small {
     padding-right: 55px;
   }
 
-  .small a img{
+  .small a img {
     width: 12vw;
   }
 
-  #faq-big, #contact-big, #about-big{
+  #faq-big,
+  #contact-big,
+  #about-big {
     display: none;
   }
-  
 }
-@media screen and (min-width: 825px){
-  .small a img{
+@media screen and (min-width: 825px) {
+  .small a img {
     width: 8vw;
   }
 }
 
-@media screen and (max-width: 750px){
-
-
-  #big-scrn{
+@media screen and (max-width: 750px) {
+  #big-scrn {
     display: none;
   }
-  .container{
+  .container {
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
   }
 
-  #mobile{
+  #mobile {
     list-style: none;
     display: flex;
     flex-direction: row;
@@ -466,33 +470,36 @@ table, th, td{
     justify-content: space-between;
   }
 
-  #mobile li p{
-    display:inline;
+  #mobile li p {
+    display: inline;
     margin: 3vh 0 0 0;
     top: 0;
     position: fixed;
     font-size: 10px;
     text-align: center;
-  
   }
 
-  .mobile-img{
+  .mobile-img {
     margin: 1vh 0 0 0;
   }
 
-  .item img{
+  .item img {
     margin-left: 5px;
     width: 15vw;
-    height: 15vh
+    height: 15vh;
   }
 
-  .item{
+  .item {
     flex: 1 1 30%;
   }
 }
 
-@media screen and (max-width: 402px){
-  .item{
-    flex: 1 1 35%
+@media screen and (max-width: 402px) {
+  .item {
+    flex: 1 1 35%;
   }
+}
+
+.footer-section h4 a {
+  color: var(--link);
 }

@@ -55,6 +55,11 @@ const Product = () => {
                     <div className='details'>
                         <h2>{product.name}</h2>
                         <p id='description'>{product.description}</p>
+                        <p>Category: {product.category}</p>
+                        {product.category == 'Clothes' &&
+                            <p id='size'>Size: {product.size}</p>}
+                        <p>Material: {product.material}</p>
+                        <p>Country of Origin: {product.originCountry}</p>
                         <p id='price'>Price: £{product.price}</p>
                         <button onClick={handleAddToCart}>Add to Cart</button>
                     </div>
