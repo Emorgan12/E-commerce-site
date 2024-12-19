@@ -1,12 +1,27 @@
 {
+  "name": "e-commerce-site",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "homepage": "https://Emorgan12.gitub.io/e-commerce-site",
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^2.2.4",
-    "bootstrap": "^5.3.3",
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@mui/material": "^6.1.8",
+    "@vitejs/plugin-react": "^4.3.3",
+    "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0"
+    "react-router-dom": "^6.28.0",
+    "reactdom": "^2.0.0"
   }
 }
