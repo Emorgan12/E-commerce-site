@@ -1,15 +1,15 @@
 import React from 'react';
 import {Routes, Route } from 'react-router-dom';
-import Login from './src/login';
-import Register from './src/register';
-import Products from './src/products';
-import Cart from './src/cart';
-import Product from './src/product';
-import FAQ from './src/faq';
-import About from './src/about';
-import Checkout from './src/checkout'
-import NewProduct from './src/new-product'
-import Dashboard from './src/dashboard';
+import Login from './login';
+import Register from './register';
+import Products from './products';
+import Cart from './cart';
+import Product from './product';
+import FAQ from './faq';
+import About from './about';
+import Checkout from './checkout'
+import NewProduct from './new-product'
+import Dashboard from './dashboard';
 
 function App() {
     return (
