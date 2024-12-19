@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "vite dev"
+    "dev": "vite dev",
+    "build": "vite build"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
