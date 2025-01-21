@@ -112,13 +112,16 @@ public class ProductRepository : IProductsRepository
         };
         var cart = new Cart
         {
-            AccountId = account.Id,
+            AccountId = 0,
             Products = new List<Product>()
         };
         await _context.Carts.AddAsync(cart);
         await _context.SaveChangesAsync();
         account.CartId = cart.Id;
         await _context.Accounts.AddAsync(account);
+        await _context.SaveChangesAsync();
+        cart.AccountId = account.Id;
+        _context.Carts.Update(cart);
         await _context.SaveChangesAsync();
         return account;
     }

@@ -35,11 +35,7 @@ const Login = () => {
             }
             return {}; // Return an empty object if the response is empty
         })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error logging in');
-            });
-        }
+    }
 
     return (
         <>
