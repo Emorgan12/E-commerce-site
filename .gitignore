@@ -14,8 +14,8 @@ dist-ssr
 *.local
 
 # Runtime data
-bin
-obj
+bin/
+obj/
 
 # Editor directories and files
 .vscode/*
@@ -28,11 +28,9 @@ obj
 *.sln
 *.sw?
 
-migrations
+migrations/
 products.db
 products.db-shm
 products.db-wal
-/api/bin
-/api/bin
 
 .fake
