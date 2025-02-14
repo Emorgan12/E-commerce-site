@@ -39,19 +39,23 @@ const Login = () => {
 
     return (
         <>
-            <div className='container'>
-                <form className='container'>
-                    <div>
-                        <label id="username" onChange={(e) => setUsername(e.target.value)}>Username</label>
-                        <input htmlFor="username" onChange={(e) => setUsername(e.target.value)}></input>
-                    </div>
-                    <div>
-                        <label id="password" onChange={(e) => setPassword(e.target.value)}>Password</label>
-                        <input type="password" htmlFor="password" onChange={(e) => setPassword(e.target.value)}></input>
-                    </div>
-                    <button type="submit" className='login' onClick={handleLogin}>Login</button>
-                    <p>Don't have an account? <Link to="/register">Register</Link></p>
-                </form>
+            <Navbar />
+
+            <div className='content'>
+                <div className='container'>
+                    <form className='container'>
+                        <div>
+                            <label id="username" onChange={(e) => setUsername(e.target.value)}>Username</label>
+                            <input htmlFor="username" onChange={(e) => setUsername(e.target.value)}></input>
+                        </div>
+                        <div>
+                            <label id="password" onChange={(e) => setPassword(e.target.value)}>Password</label>
+                            <input type="password" htmlFor="password" onChange={(e) => setPassword(e.target.value)}></input>
+                        </div>
+                        <button type="submit" className='login' onClick={handleLogin}>Login</button>
+                        <p>Don't have an account? <Link to="/register">Register</Link></p>
+                    </form>
+                </div>
             </div>
 
             <Footer />

@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@mui/material";
+import Navbar from "./navbar";
 
 function Register(){
 
@@ -57,29 +58,33 @@ function Register(){
 
     return(
         <>
-            <div className="container">
-                <form>
-                    <div>
-                        <label htmlFor="email" id="email">Email</label><br />
-                        <input htmlFor="email" type="email" onChange={(e) => setEmail(e.target.value)}></input>
-                    </div>
-                    <div>
-                        <label htmlFor="username" id="username">Username</label><br />
-                        <input htmlFor="username" onChange={e => setUsername(e.target.value)}></input>
-                    </div>
-                    <div>
-                        <label htmlFor="password" id="password">Password</label><br />
-                        <input htmlFor="password" type="password" onChange={(e) => setPassword(e.target.value)}></input>
-                    </div>
-                    <div className="admin-checkbox">
-                        <Checkbox onChange={(e) => setAdmin(e.target.checked)}/>
-                        <label>Admin?</label>
-                    </div>
-                    <div className="container"> 
-                        <button type="submit" className='register' onClick={CreateAccount}>Register</button>
-                        <p>Already have an account? <Link to="/">Login</Link></p>
-                    </div>
-                </form>
+            <Navbar/>
+
+            <div className="content">
+                <div className="container">
+                    <form>
+                        <div>
+                            <label htmlFor="email" id="email">Email</label><br />
+                            <input htmlFor="email" type="email" onChange={(e) => setEmail(e.target.value)}></input>
+                        </div>
+                        <div>
+                            <label htmlFor="username" id="username">Username</label><br />
+                            <input htmlFor="username" onChange={e => setUsername(e.target.value)}></input>
+                        </div>
+                        <div>
+                            <label htmlFor="password" id="password">Password</label><br />
+                            <input htmlFor="password" type="password" onChange={(e) => setPassword(e.target.value)}></input>
+                        </div>
+                        <div className="admin-checkbox">
+                            <Checkbox onChange={(e) => setAdmin(e.target.checked)}/>
+                            <label>Admin?</label>
+                        </div>
+                        <div className="container">
+                            <button type="submit" className='register' onClick={CreateAccount}>Register</button>
+                            <p>Already have an account? <Link to="/">Login</Link></p>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <Footer/>

@@ -7,7 +7,7 @@ const About = () => {
     return (
         <>
             <Navbar />
-            <div className="content" id="about">
+            <div id="about">
                 <h1 className="about-head">Who are we?</h1>
                 <p>We are a leading company in the e-commerce industry, dedicated to providing the best online shopping experience.</p>
                 <h2 className="about-subhead">Our Mission</h2>

@@ -9,7 +9,7 @@ import { AuthContext } from './authcontext.jsx';
 
 function Dashboard(){
     const {user} = useContext(AuthContext);
-
+    
     return(
         <>
         </>

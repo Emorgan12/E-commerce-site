@@ -79,11 +79,11 @@ function Checkout(){
                         </tr>
                         <tr>
                             <td style={{fontWeight: 700}}>Tax</td>
-                            <td>£{totalPrice*0.2}</td>
+                            <td>£{(totalPrice*0.2).toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td style={{fontWeight: 700}}>Total Cost</td>
-                            <td>£{totalPrice + (totalPrice*0.2)}</td>
+                            <td>£{(totalPrice + (totalPrice*0.2)).toFixed(2)}</td>
                         </tr>
                     </tbody>
                 </table>

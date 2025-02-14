@@ -5,6 +5,7 @@ import Navbar from "./navbar";
 import Footer from "./footer";
 import { AuthContext } from "./authcontext";
 import BASE_URL from "../main";
+import { Link } from "react-router-dom";
 
 function Cart(){
 
@@ -82,15 +83,15 @@ function Cart(){
                 
                 <div class="cart-summary">
                     <span>Tax:</span>
-                    <span>£{totalPrice*0.2}</span>
+                    <span>£{(totalPrice*0.2).toFixed(2)}</span>
                 </div>
                 
                 <div class="cart-summary" >
                     <span>Total:</span>
-                    <span>£{totalPrice + (totalPrice*0.2)}</span>
+                    <span>£{(totalPrice + (totalPrice*0.2)).toFixed(2)}</span>
                 </div>
                 
-                <button class="checkout-btn">Proceed to Checkout</button>
+                <Link to="/checkout"><button class="checkout-btn">Proceed to Checkout</button></Link>
             </div>
                 
 
