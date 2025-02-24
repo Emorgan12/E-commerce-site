@@ -75,7 +75,7 @@ function Checkout(){
 
                         <tr>
                             <td style={{fontWeight: 700}}>Subtotal</td>
-                            <td>£{totalPrice}</td>
+                            <td>£{totalPrice.toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td style={{fontWeight: 700}}>Tax</td>

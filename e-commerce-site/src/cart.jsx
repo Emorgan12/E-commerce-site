@@ -78,7 +78,7 @@ function Cart(){
                 </div>
                 <div class="cart-summary">
                     <span>Subtotal:</span>
-                    <span>£{totalPrice}</span>
+                    <span>£{totalPrice.toFixed(2)}</span>
                 </div>
                 
                 <div class="cart-summary">
